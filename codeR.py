@@ -1127,14 +1127,15 @@ def download_segmentations():
         return jsonify({'success': False, 'error': f'An error occurred during download: {str(e)}'}), 500
 
 
-if __name__ == '__main__':
-    print("Initializing SAM2...")
-    if initialize_sam2():
-        print("SAM2 initialized successfully!")
-    else:
-        print("Warning: SAM2 not available. Some features may not work.")
-        print("To use SAM2, please install with: pip install git+https://github.com/facebookresearch/sam2.git")
+# Initialize SAM2 when the module is imported (for gunicorn compatibility)
+print("Initializing SAM2...")
+if initialize_sam2():
+    print("SAM2 initialized successfully!")
+else:
+    print("Warning: SAM2 not available. Some features may not work.")
+    print("To use SAM2, please install with: pip install git+https://github.com/facebookresearch/sam2.git")
 
+if __name__ == '__main__':
     print("Starting Flask server...")
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
